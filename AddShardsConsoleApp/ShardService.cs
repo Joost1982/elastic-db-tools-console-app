@@ -49,7 +49,6 @@ internal class ShardService
             default:
                 break;
         }
-
     }
 
     private void PrintAllExistingShards()

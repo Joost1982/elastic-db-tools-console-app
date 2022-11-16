@@ -4,7 +4,6 @@ namespace AddShardsConsoleApp;
 
 internal class ShardMapService
 {
-
     private readonly string? _databaseName;
     private readonly string? _serverName;
     private readonly string? _connectionString;
@@ -15,7 +14,6 @@ internal class ShardMapService
         _databaseName = database;
         _serverName = server;
         _connectionString = connectionString;
-
         _shardMapManager = GetShardMapManager();
     }
 
@@ -55,7 +53,6 @@ internal class ShardMapService
             default:
                 break;
         }
-
     }
 
     private void SelectShardMap()
@@ -103,7 +100,6 @@ internal class ShardMapService
                 return;
             }
         }
-
         _shardMapManager?.CreateListShardMap<int>(shardMapName);
         Console.WriteLine($"  {shardMapName} does not exist, new shard map created.");
     }
@@ -123,7 +119,6 @@ internal class ShardMapService
         }
     }
 
-
     private void DeleteShardMapIfExists(string shardMapName)
     {
         var existingShardMaps = _shardMapManager?.GetShardMaps().ToList() ?? new List<ShardMap>();
@@ -140,7 +135,6 @@ internal class ShardMapService
         Console.WriteLine($"  {shardMapName} does not exist, nothing deleted.");
     }
 
-
     private void PrintAllExistingShardMaps()
     {
         var shardMaps = _shardMapManager?.GetShardMaps().ToList() ?? new List<ShardMap>();
@@ -149,11 +143,8 @@ internal class ShardMapService
             Console.WriteLine($"  " + shardMap.Name);
     }
 
-
-
     private ShardMapManager GetShardMapManager()
     {
-
         Console.WriteLine("Trying to get a reference to the ShardMapManager on " + _serverName + "...");
         try
         {
@@ -161,12 +152,10 @@ internal class ShardMapService
             Console.WriteLine("  ShardMapManager found.");
 
             return shardMapManager;
-
         }
         catch
         {
             throw new Exception($"Could not get ShardMapManager reference. Please check connection string.");
         }
     }
-
 }

@@ -18,6 +18,7 @@ internal class Program
         try
         {
             CheckEnvVars(); // Check if env vars are set and throw error if not.
+            Console.WriteLine(connectionString);
             ShardMapService shardMapService = new(databaseName, serverName, connectionString);
             int choice = shardMapService.ShowMenu();
             while (choice != 5)

@@ -14,7 +14,8 @@ internal class ShardMapService
         _databaseName = database;
         _serverName = server;
         _connectionString = connectionString;
-        _shardMapManager = GetShardMapManager();
+        //_shardMapManager = GetShardMapManager();
+        _shardMapManager = CreateShardMapManagerIfNotExists();
     }
 
     public int ShowMenu()
@@ -158,4 +159,34 @@ internal class ShardMapService
             throw new Exception($"Could not get ShardMapManager reference. Please check connection string.");
         }
     }
+
+
+    private ShardMapManager CreateShardMapManagerIfNotExists()
+    {
+        ShardMapManager shardMapManager;
+        bool shardMapManagerExists = ShardMapManagerFactory.TryGetSqlShardMapManager(
+                                                _connectionString,
+                                                ShardMapManagerLoadPolicy.Lazy,
+                                                out shardMapManager);
+
+        if (shardMapManagerExists)
+        {
+            Console.WriteLine("Shard Map Manager already exists");
+            shardMapManager = ShardMapManagerFactory.GetSqlShardMapManager(_connectionString, ShardMapManagerLoadPolicy.Lazy); // because it already exists!
+        }
+        else
+        {
+            // Create the Shard Map Manager.
+            ShardMapManagerFactory.CreateSqlShardMapManager(_connectionString);
+            Console.WriteLine("Created SqlShardMapManager");
+
+            shardMapManager = ShardMapManagerFactory.GetSqlShardMapManager(
+                    _connectionString,
+                    ShardMapManagerLoadPolicy.Lazy);
+        }
+        
+        return shardMapManager;
+    }
+
+
 }
